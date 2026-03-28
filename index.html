@@ -1472,6 +1472,41 @@
         border-color 0.35s, box-shadow 0.35s, opacity 0.3s;
     }
 
+    /* ============================================================
+   BACK TO TOP FIXE
+============================================================ */
+    #back-to-top-fixed {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      z-index: 99;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(110, 231, 183, 0.3);
+    }
+
+    #back-to-top-fixed.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #back-to-top-fixed:hover {
+      box-shadow: 0 8px 30px rgba(110, 231, 183, 0.5);
+      transform: translateY(-3px);
+    }
+
     /* RESPONSIVE */
     @media(max-width:1024px) {
       section {
@@ -2005,13 +2040,21 @@
         <span class="footer-name">Cheikh Mbaye — 2026</span>
         <span class="footer-meta">Étudiant en Licence 1 Informatique · Portfolio HTML/CSS</span>
       </div>
+
+      <!-- Les icônes au centre -->
       <div class="footer-links">
         <a href="https://www.instagram.com/mcmbaye7" target="_blank" rel="noopener"
-          class="footer-social-link footer-instagram" title="Instagram"><i class="ri-instagram-line"></i></a>
+          class="footer-social-link footer-instagram" title="Instagram">
+          <i class="ri-instagram-line"></i>
+        </a>
         <a href="https://www.snapchat.com/add/mcmbaye7" target="_blank" rel="noopener"
-          class="footer-social-link footer-snapchat" title="Snapchat"><i class="ri-snapchat-line"></i></a>
+          class="footer-social-link footer-snapchat" title="Snapchat">
+          <i class="ri-snapchat-line"></i>
+        </a>
       </div>
-      <a href="#hero" class="back-to-top">↑ Retour en haut</a>
+
+      <!-- Espace vide pour équilibrer -->
+      <div style="width: 120px;"></div>
     </div>
   </footer>
 
@@ -2274,7 +2317,29 @@
         });
       });
     });
+    /* ---- Back to top fixe ---- */
+    window.addEventListener('load', () => {
+      const backToTopBtn = document.getElementById('back-to-top-fixed');
+
+      if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 400) {
+            backToTopBtn.classList.add('visible');
+          } else {
+            backToTopBtn.classList.remove('visible');
+          }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    });
   </script>
+  <button id="back-to-top-fixed" title="Retour en haut">
+    <i class="ri-arrow-up-line"></i>
+  </button>
 </body>
+
 
 </html>
