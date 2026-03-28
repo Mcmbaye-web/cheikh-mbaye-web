@@ -1425,6 +1425,53 @@
       transform: translateY(-2px);
     }
 
+    /* ============================================================
+   FILTER BUTTONS
+============================================================ */
+    .filter-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: var(--primary);
+      border-color: var(--accent);
+    }
+
+    /* Cards cachées */
+    .project-card.hidden {
+      display: none;
+    }
+
+    .project-card {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.35s, box-shadow 0.35s, opacity 0.3s;
+    }
+
     /* RESPONSIVE */
     @media(max-width:1024px) {
       section {
@@ -1699,6 +1746,9 @@
             <div class="info-item"><strong>Année</strong><span>2025 — 2026</span></div>
             <div class="info-item"><strong>Disponibilité</strong><span>Projets & Stages</span></div>
           </div>
+          <a href="cv.pdf" download class="btn-primary" style="width:fit-content;">
+            <i class="ri-download-line"></i> Télécharger mon CV
+          </a>
           <div class="reveal">
             <h3
               style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">
@@ -1763,8 +1813,19 @@
         <p class="section-subtitle" style="max-width:380px;font-size:0.9rem;">Exercices et projets réalisés tout au long
           de mon apprentissage en Licence 1.</p>
       </div>
+
+      <!-- BOUTONS FILTRE -->
+      <div class="filter-btns reveal">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="html">HTML</button>
+        <button class="filter-btn" data-filter="css">CSS</button>
+        <button class="filter-btn" data-filter="js">JavaScript</button>
+      </div>
+
       <div class="projects-grid">
-        <article class="project-card reveal">
+
+        <!-- Projet 1 -->
+        <article class="project-card reveal" data-category="html css">
           <div class="project-img"><img src="images/projet-1.png" alt="Landing Page"
               onerror="this.style.display='none'">
             <div class="project-img-placeholder">🌐</div>
@@ -1780,7 +1841,9 @@
             <a href="#" class="project-link">Voir le projet →</a>
           </div>
         </article>
-        <article class="project-card reveal">
+
+        <!-- Projet 2 -->
+        <article class="project-card reveal" data-category="html css">
           <div class="project-img"><img src="images/" alt="Page de profil" onerror="this.style.display='none'">
             <div class="project-img-placeholder">👤</div>
             <div class="project-img-overlay"></div>
@@ -1793,7 +1856,9 @@
             <a href="#" class="project-link">Voir le projet →</a>
           </div>
         </article>
-        <article class="project-card reveal">
+
+        <!-- Projet 3 -->
+        <article class="project-card reveal" data-category="html css">
           <div class="project-img"><img src="images/Capture d'écran 2026-03-22 à 16.21.28.png" alt="Formulaire stylisé"
               onerror="this.style.display='none'">
             <div class="project-img-placeholder">📋</div>
@@ -1808,7 +1873,9 @@
               projet →</a>
           </div>
         </article>
-        <article class="project-card reveal">
+
+        <!-- Projet 4 -->
+        <article class="project-card reveal" data-category="css">
           <div class="project-img"><img src="images/Capture d'écran 2026-03-24 à 22.09.40.png" alt="Exercices Flexbox"
               onerror="this.style.display='none'">
             <div class="project-img-placeholder">📐</div>
@@ -1823,6 +1890,7 @@
             <span class="project-link">Projet local</span>
           </div>
         </article>
+
       </div>
     </div>
   </section>
@@ -2180,6 +2248,32 @@
 
     const statsSection = document.querySelector('.hero-stats');
     if (statsSection) counterObserver.observe(statsSection);
+    /* ---- Filtre projets ---- */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Bouton actif
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        projectCards.forEach(card => {
+          const categories = card.dataset.category;
+
+          if (filter === 'all' || categories.includes(filter)) {
+            card.classList.remove('hidden');
+            // Animation
+            card.style.animation = 'fadeSlideUp 0.4s ease both';
+            setTimeout(() => card.style.animation = '', 400);
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
   </script>
 </body>
 
