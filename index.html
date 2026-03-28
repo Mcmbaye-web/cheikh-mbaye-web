@@ -1626,21 +1626,29 @@
       </div>
       <div class="hero-stats">
         <div class="hero-stat-item">
-          <div class="hero-stat-number">4<span>+</span></div>
+          <div class="hero-stat-number">
+            <span class="counter" data-target="4">0</span><span>+</span>
+          </div>
           <div class="hero-stat-label">Projets réalisés</div>
         </div>
         <div class="hero-stat-item">
-          <div class="hero-stat-number">1<span>re</span></div>
-          <div class="hero-stat-label">Année universitaire</div>
+          <div class="hero-stat-number">
+            <span class="counter" data-target="200">0</span><span>+</span>
+          </div>
+          <div class="hero-stat-label">Heures de code</div>
         </div>
         <div class="hero-stat-item">
-          <div class="hero-stat-number">∞</div>
-          <div class="hero-stat-label">Curiosité</div>
+          <div class="hero-stat-number">
+            <span class="counter" data-target="6">0</span><span>+</span>
+          </div>
+          <div class="hero-stat-label">Technologies apprises</div>
         </div>
       </div>
-      <div class="hero-scroll-hint">
-        <div class="scroll-line"></div>Scrollez pour découvrir
-      </div>
+
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>Scrollez pour découvrir
+    </div>
     </div>
     <div class="hero-code">
       <div class="code-header">
@@ -2142,6 +2150,36 @@
 
     // Charger langue sauvegardée
     window.addEventListener('load', () => { setLang(localStorage.getItem('lang') || 'fr'); });
+    /* ---- Compteur animé ---- */
+    function animateCounter(el, target, duration = 2000) {
+      let start = 0;
+      const step = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) {
+          el.textContent = target;
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(start);
+        }
+      }, 16);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counters = entry.target.querySelectorAll('.counter');
+          counters.forEach(counter => {
+            const target = parseInt(counter.dataset.target);
+            animateCounter(counter, target);
+          });
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.hero-stats');
+    if (statsSection) counterObserver.observe(statsSection);
   </script>
 </body>
 
